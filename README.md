@@ -3,10 +3,10 @@ A meta-analysis on alternative mating tactics:  when the main and the alternativ
 
 # Authors
 da Silva, A.V. (mandyvieira15@gmail.com)
-Ventura, S.P. 
-Almeida, J.G.L. 
-Oliveira, R.
-Peixoto, P.E.C.
+Ventura, S.P. (stefania.ventura2@gmail.com)
+Almeida, J.G.L. (jgabriel.bio2@gmail.com)
+Oliveira, R. (reislaxoliveira@gmail.com)
+Peixoto, P.E.C. (pauloenrique@gmail.com)
 
 ## GENERAL INFORMATION ## 
 
