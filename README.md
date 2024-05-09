@@ -3,10 +3,10 @@ A meta-analysis on alternative mating tactics:  when the main and the alternativ
 
 # Authors
 da Silva, A.V. (mandyvieira15@gmail.com)
-Ventura, S.P. (stefania.ventura2@gmail.com)
 Almeida, J.G.L. (jgabriel.bio2@gmail.com)
+Ventura, S.P. (stefania.ventura2@gmail.com)
 Oliveira, R. (reislaxoliveira@gmail.com)
-Peixoto, P.E.C. (pauloenrique@gmail.com)
+Peixoto, P.E.C. (pauloenrique@gmail.com) * corresponding author
 
 ## GENERAL INFORMATION ## 
 
@@ -34,7 +34,7 @@ All data were written in English
 
 # File: data_tactics.csv
 
-# General description
+# General description: 
 This file contains information about the reproductive success of species exhibiting alternative mating tactics and whether individuals of each species can change this tactics (flexible) or not (fixed) during their lifespan
 
 # Date of creation
