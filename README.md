@@ -32,7 +32,7 @@ All data were written in English
 
 # DATA AND FILE OVERVIEW #
 
-### File: data_tactics.csv
+### File: data_tactics.xlsx
 
 #### General description
 This file contains information about the reproductive success of species exhibiting alternative mating tactics and whether individuals of each species can change this tactics (flexible) or not (fixed) during their lifespan
