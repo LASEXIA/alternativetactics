@@ -54,6 +54,28 @@ February, 2024
 #### Last update
 May, 2024
 
+### File: analysis.R
+
+#### General description
+This file contains the script to generate all meta-analytical models
+
+#### Date of creation
+September, 2020
+
+#### Last update
+May, 2024
+
+### File: figure.R
+
+#### General description
+This file contains the script to generate the meta-analytical figures. It is a modification from orchard_plot function (from orchaRd v. 0.0.9 package) to remove the prediction interval
+
+#### Date of creation
+September, 2020
+
+#### Last update
+May, 2024
+
 # METHODOLOGICAL INFORMATION #
 
 ### Brief description of methods
