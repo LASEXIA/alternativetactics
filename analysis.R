@@ -217,23 +217,23 @@ i2_ml(m1) * 100
 ## Plot ----------------------------
 
 # Creating a model without intercept to build the figure
-m1_fig <- rma.mv(yi,vi, mods = ~measure1 -1,
-             random=list(~1|sp2, 
-                         ~1|id,
-                         ~1|researcher,
-                         ~1|experiment, 
-                         ~1|measure_timing, 
-                         ~1|comparison, 
-                         ~1|n_obs,
-                         ~1|species2),
-             R = list(sp2 = cov.matrix,
-                      id = measure_cvc),
-             control=list(optimizer="optim"),
-             data = measure)
+m1_fig <- rma.mv(yi,vi, mods = ~measure1 - 1,
+                 random=list(~1|sp2, 
+                             ~1|id,
+                             ~1|researcher,
+                             ~1|experiment, 
+                             ~1|measure_timing, 
+                             ~1|comparison, 
+                             ~1|n_obs,
+                             ~1|species2),
+                 R = list(sp2 = cov.matrix_measure,
+                          id = measure_cvc),
+                 control=list(optimizer="optim"),
+                 data = measure)
 
 # OrchaRd plot (modified version without prediction lines)
 #jpeg("fig1_measure.jpg", width = 1400, height = 1000, res = 300)
-tiff("fig1_measure_tif.tif", width = 1400, height = 1000, compression = "lzw", res = 300)
+tiff("fig5.tif", width = 1400, height = 1000, compression = "lzw", res = 300)
 orchard(m1_fig, mod = "measure1", xlab = "Hedges' g") +
   scale_colour_manual(values = c("#808080", "#808080")) + 
   scale_fill_manual(values = c("#0a0a0a", "#0a0a0a")) +
@@ -282,7 +282,7 @@ i2_ml(m2, method = "ns") * 100
 
 # Orchard plot (modified version without prediction lines)
 #jpeg("fig2_overall.jpg", width = 1400, height = 1000, res = 300)
-tiff("fig2_overall_tif.tif", width = 1400, height = 1000, compression = "lzw", res = 300)
+tiff("fig6.tif", width = 1400, height = 1000, compression = "lzw", res = 300)
 orchard(m2, xlab= "Hedges' g") +
   labs(y = "Effect sizes") +
   scale_color_manual(values = "#808080") + 
@@ -378,22 +378,20 @@ m3_fig <- rma.mv(yi,vi, mods = ~type_tactics - 1,
              control=list(optimizer="optim"), 
              data = tactic_no_NA)
 
-tiff("fig3_AMTexpression_tif.tif", width = 1400, height = 1000, compression = "lzw", res = 300)
-jpeg("fig3_AMTexpression.jpg", width = 1400, height = 1000, res = 300)
+tiff("fig7.tif", width = 1400, height = 1000, compression = "lzw", res = 300)
 orchard(m3_fig, mod = "type_tactics", xlab = "Hedges' g") +
   scale_colour_manual(values = c("#808080", "#808080")) + 
   scale_fill_manual(values = c("#0a0a0a", "#0a0a0a")) +
   theme_classic() +
+  ylab("Expression of AMT") +
   theme(axis.text = element_text(size = 11, colour = "black"), 
         axis.title = element_text(size = 13),
-        axis.title.x = element_blank(),
         legend.text = element_text(size = 10),
         legend.title = element_text(size = 10),
         legend.position = "top") +
   coord_flip() +
   scale_y_discrete(labels = c("Fixed", "Flexible"))+
   scale_size(range = c(0.5, 6), name = "Precision") +
-  ylab("Expression of AMT") +
   guides(size = guide_legend(override.aes = list(colour = "#808080")))
 dev.off()
 
@@ -443,18 +441,17 @@ dfstudy <- data.frame(sei = tactics$sei,
 
 # Plot
 study_fig <- ggplot(data = tactics, aes(x = sei, y = yi)) + 
-  geom_point(aes(size = (1/sqrt(yi))), shape = 21, fill = "grey85", colour = "grey60", alpha = 0.5) + 
+  geom_point(aes(size = (1/sqrt(yi))), shape = 21, fill = "#808080", colour = "#808080", alpha = 0.5) + 
   geom_hline(yintercept = 0, linetype = 2, colour = "black", alpha = 0.5) + 
   geom_line(data = dfstudy, aes(x = sei, y = predi), size = 1, colour = "#0a0a0a") + 
   geom_ribbon(data = dfstudy, aes(ymin = lower,  ymax = upper, y = 0), alpha = 0.3, fill = "#808080") + 
-  labs(x = "Square root of variance (sei)", y = "Effect size (Hedges' g)", size = "Precision (1/SE)") + 
+  labs(x = "Square root of variance (sei)", y = "Hedges'g", size = "Precision") + 
   theme_classic() +
   theme(axis.text = element_text(size = 11, colour = "black"), 
         axis.title = element_text(size = 13),
-        panel.grid = element_blank(),
-        legend.text = element_text(size = 10), 
+        legend.text = element_text(size = 10),
+        legend.title = element_text(size = 10),
         legend.position = "top", 
-        legend.title = element_text(size = 12), 
         plot.margin = ggplot2::unit(c(1, 1, 1, 1), "cm"))
 
 
@@ -488,22 +485,21 @@ dftime <- data.frame(year = tactics$year,
 
 # Plot
 time_fig <- ggplot(data = tactics, aes(x = year, y = yi)) + 
-  geom_point(aes(size = (1/sqrt(yi))), shape = 21, fill = "grey85", colour = "grey60", alpha = 0.5) + 
+  geom_point(aes(size = (1/sqrt(yi))), shape = 21, fill = "#808080", colour = "#808080", alpha = 0.5) + 
   geom_hline(yintercept = 0, linetype = 2, colour = "black", alpha = 0.5) + 
   geom_line(data = dftime, aes(x = year, y = predi), size = 1, colour = "#0a0a0a") + 
   geom_ribbon(data = dftime, aes(ymin = lower,  ymax = upper, y = 0), alpha = 0.3, fill = "#808080") + 
-  labs(x = "Year of publication", y = "Effect size (Hedges' g)", size = "Precision (1/SE)") + 
+  labs(x = "Year of publication", y = "Hedges' g", size = "Precision") + 
   theme_classic() +
   theme(axis.text = element_text(size = 11, colour = "black"), 
         axis.title = element_text(size = 13),
-        panel.grid = element_blank(),
-        legend.text = element_text(size = 10), 
+        legend.text = element_text(size = 10),
+        legend.title = element_text(size = 10),
         legend.position = "top", 
-        legend.title = element_text(size = 12), 
         plot.margin = ggplot2::unit(c(1, 1, 1, 1), "cm"))
 
 # Creating a figure with both biases
-tiff("fig4_pubias_tif.tif", width = 1750, height = 1000, compression = "lzw", res = 300)
+tiff("fig8.tif", width = 1750, height = 1000, compression = "lzw", res = 300)
 #jpeg("fig4_pubias.jpg", width = 1800, height = 1000, res = 300)
 ggpubr::ggarrange(study_fig, time_fig, ncol = 2, common.legend = TRUE, legend = "top", labels = c("(a)", "(b)"))
 dev.off()
@@ -576,76 +572,11 @@ orchard(s1_fig, mod = "type_tactics", xlab = "Hedges' g") +
 
 ### Model ------------------------
 
-s4 <- rma.mv(yi,vi, mods = ~comparison2,
+s2 <- rma.mv(yi,vi, mods = ~comparison2,
              random=list(~1|sp2, 
                          ~1|id,
                          ~1|researcher,
                          ~1|experiment, 
-                         ~1|comparison, 
-                         ~1|n_obs,
-                         ~1|species2),
-             R = list(sp2 = cov.matrix_expression,
-                      id = expression_cvc),
-             control=list(optimizer="optim"), 
-             data = tactic_no_NA)
-
-summary(s4)
-
-### R2 ---------------------------------------------------
-
-r2_ml(s4)
-
-
-### Heterogeneity  ---------------------------------------
-
-i2_ml(m3) * 100
-
-
-### Plot -------------------------------------------------
-
-# Creating a model without intercept in order to build the figure
-s4_fig <- rma.mv(yi,vi, mods = ~comparison2 - 1,
-                 random=list(~1|sp2, 
-                             ~1|id,
-                             ~1|researcher,
-                             ~1|experiment, 
-                             ~1|comparison, 
-                             ~1|n_obs,
-                             ~1|species2),
-                 R = list(sp2 = cov.matrix_expression,
-                          id = expression_diag),
-                 control=list(optimizer="optim"), 
-                 data = tactic_no_NA)
-
-
-orchard(s4_fig, mod = "type_tactics", xlab = "Hedges' g") +
-  scale_colour_manual(values = c("#808080", "#808080", "#808080", "#808080")) + 
-  scale_fill_manual(values = c("#0a0a0a", "#0a0a0a", "#0a0a0a", "#0a0a0a")) +
-  theme_classic() +
-  theme(axis.text = element_text(size = 11, colour = "black"), 
-        axis.title = element_text(size = 13),
-        axis.title.x = element_blank(),
-        legend.text = element_text(size = 10),
-        legend.title = element_text(size = 10),
-        legend.position = "top") +
-  coord_flip() +
-  scale_y_discrete(labels = c("Fixed", "Flexible"))+
-  scale_size(range = c(0.5, 6), name = "Precision") +
-  ylab("Expression of AMT") +
-  guides(size = guide_legend(override.aes = list(colour = "#808080")))
-dev.off()
-
-
-## Taxonomic groups --------------------------------
-
-### Model ------------------------
-
-s2 <- rma.mv(yi,vi, mods = ~family,
-             random=list(~1|sp2, 
-                         ~1|id,
-                         ~1|researcher,
-                         ~1|experiment, 
-                         ~1|measure_timing, 
                          ~1|comparison, 
                          ~1|n_obs,
                          ~1|species2),
@@ -663,30 +594,29 @@ r2_ml(s2)
 
 ### Heterogeneity  ---------------------------------------
 
-i2_ml(m3) * 100
+i2_ml(s2) * 100
 
 
 ### Plot -------------------------------------------------
 
 # Creating a model without intercept in order to build the figure
-s2_fig <- rma.mv(yi,vi, mods = ~family - 1,
-             random=list(~1|sp2, 
-                         ~1|id,
-                         ~1|researcher,
-                         ~1|experiment, 
-                         ~1|measure_timing, 
-                         ~1|comparison, 
-                         ~1|n_obs,
-                         ~1|species2),
-             R = list(sp2 = cov.matrix_expression,
-                      id = expression_cvc),
-             control=list(optimizer="optim"), 
-             data = tactic_no_NA)
+s2_fig <- rma.mv(yi,vi, mods = ~comparison2 - 1,
+                 random=list(~1|sp2, 
+                             ~1|id,
+                             ~1|researcher,
+                             ~1|experiment, 
+                             ~1|comparison, 
+                             ~1|n_obs,
+                             ~1|species2),
+                 R = list(sp2 = cov.matrix_expression,
+                          id = expression_diag),
+                 control=list(optimizer="optim"), 
+                 data = tactic_no_NA)
 
 
 orchard(s2_fig, mod = "type_tactics", xlab = "Hedges' g") +
-  scale_colour_manual(values = c(rep("#808080", times = 35))) + 
-  scale_fill_manual(values = c(rep("#0a0a0a", times = 35))) +
+  scale_colour_manual(values = c("#808080", "#808080", "#808080", "#808080")) + 
+  scale_fill_manual(values = c("#0a0a0a", "#0a0a0a", "#0a0a0a", "#0a0a0a")) +
   theme_classic() +
   theme(axis.text = element_text(size = 11, colour = "black"), 
         axis.title = element_text(size = 13),
@@ -695,20 +625,21 @@ orchard(s2_fig, mod = "type_tactics", xlab = "Hedges' g") +
         legend.title = element_text(size = 10),
         legend.position = "top") +
   coord_flip() +
+  scale_y_discrete(labels = c("Fixed", "Flexible"))+
   scale_size(range = c(0.5, 6), name = "Precision") +
   ylab("Expression of AMT") +
   guides(size = guide_legend(override.aes = list(colour = "#808080")))
 dev.off()
 
-## Experimental design --------------------------
+## Vertebrates x invertebrates  -----------------------------------
 
 ### Model ------------------------
 
-s3 <- rma.mv(yi,vi, mods = ~experiment,
+s3 <- rma.mv(yi,vi, mods = ~vertebrate,
              random=list(~1|sp2, 
                          ~1|id,
                          ~1|researcher,
-                         ~1|measure_timing, 
+                         ~1|experiment, 
                          ~1|comparison, 
                          ~1|n_obs,
                          ~1|species2),
@@ -732,82 +663,21 @@ i2_ml(s3) * 100
 ### Plot -------------------------------------------------
 
 # Creating a model without intercept in order to build the figure
-s3_fig <- rma.mv(yi,vi, mods = ~experiment - 1,
-             random=list(~1|sp2, 
-                         ~1|id,
-                         ~1|researcher,
-                         ~1|measure_timing, 
-                         ~1|comparison, 
-                         ~1|n_obs,
-                         ~1|species2),
-             R = list(sp2 = cov.matrix_expression,
-                      id = expression_cvc),
-             control=list(optimizer="optim"), 
-             data = tactic_no_NA)
+s3_fig <- rma.mv(yi,vi, mods = ~measure_timing - 1,
+                 random=list(~1|sp2, 
+                             ~1|id,
+                             ~1|researcher,
+                             ~1|experiment, 
+                             ~1|comparison, 
+                             ~1|n_obs,
+                             ~1|species2),
+                 R = list(sp2 = cov.matrix_expression,
+                          id = diag),
+                 control=list(optimizer="optim"), 
+                 data = tactic_no_NA)
+
 
 orchard(s3_fig, mod = "type_tactics", xlab = "Hedges' g") +
-  scale_colour_manual(values = c("#808080", "#808080", "#808080", "#808080")) + 
-  scale_fill_manual(values = c("#0a0a0a", "#0a0a0a", "#0a0a0a", "#0a0a0a")) +
-  theme_classic() +
-  theme(axis.text = element_text(size = 11, colour = "black"), 
-        axis.title = element_text(size = 13),
-        axis.title.x = element_blank(),
-        legend.text = element_text(size = 10),
-        legend.title = element_text(size = 10),
-        legend.position = "top") +
-  coord_flip() +
-  scale_size(range = c(0.5, 6), name = "Precision") +
-  ylab("Expression of AMT") +
-  guides(size = guide_legend(override.aes = list(colour = "#808080")))
-dev.off()
-
-## Vertebrates x invertebrates  -----------------------------------
-
-### Model ------------------------
-
-s4 <- rma.mv(yi,vi, mods = ~vertebrate,
-             random=list(~1|sp2, 
-                         ~1|id,
-                         ~1|researcher,
-                         ~1|experiment, 
-                         ~1|comparison, 
-                         ~1|n_obs,
-                         ~1|species2),
-             R = list(sp2 = cov.matrix_expression,
-                      id = expression_cvc),
-             control=list(optimizer="optim"), 
-             data = tactic_no_NA)
-
-summary(s4)
-
-### R2 ---------------------------------------------------
-
-r2_ml(s4)
-
-
-### Heterogeneity  ---------------------------------------
-
-i2_ml(m3) * 100
-
-
-### Plot -------------------------------------------------
-
-# Creating a model without intercept in order to build the figure
-s4_fig <- rma.mv(yi,vi, mods = ~measure_timing - 1,
-             random=list(~1|sp2, 
-                         ~1|id,
-                         ~1|researcher,
-                         ~1|experiment, 
-                         ~1|comparison, 
-                         ~1|n_obs,
-                         ~1|species2),
-             R = list(sp2 = cov.matrix_expression,
-                      id = diag),
-             control=list(optimizer="optim"), 
-             data = tactic_no_NA)
-
-
-orchard(s4_fig, mod = "type_tactics", xlab = "Hedges' g") +
   scale_colour_manual(values = c("#808080", "#808080", "#808080", "#808080")) + 
   scale_fill_manual(values = c("#0a0a0a", "#0a0a0a", "#0a0a0a", "#0a0a0a")) +
   theme_classic() +
@@ -824,15 +694,17 @@ orchard(s4_fig, mod = "type_tactics", xlab = "Hedges' g") +
   guides(size = guide_legend(override.aes = list(colour = "#808080")))
 dev.off()
 
-## Timing -----------------------------------
 
-### Model ----------------------------------
+## Taxonomic groups --------------------------------
 
-s4 <- rma.mv(yi,vi, mods = ~measure_timing,
+### Model ------------------------
+
+s4 <- rma.mv(yi,vi, mods = ~family,
              random=list(~1|sp2, 
                          ~1|id,
                          ~1|researcher,
                          ~1|experiment, 
+                         ~1|measure_timing, 
                          ~1|comparison, 
                          ~1|n_obs,
                          ~1|species2),
@@ -850,13 +722,138 @@ r2_ml(s4)
 
 ### Heterogeneity  ---------------------------------------
 
-i2_ml(m3) * 100
+i2_ml(s4) * 100
 
 
 ### Plot -------------------------------------------------
 
 # Creating a model without intercept in order to build the figure
-s4_fig <- rma.mv(yi,vi, mods = ~measure_timing - 1,
+s4_fig <- rma.mv(yi,vi, mods = ~family - 1,
+             random=list(~1|sp2, 
+                         ~1|id,
+                         ~1|researcher,
+                         ~1|experiment, 
+                         ~1|measure_timing, 
+                         ~1|comparison, 
+                         ~1|n_obs,
+                         ~1|species2),
+             R = list(sp2 = cov.matrix_expression,
+                      id = expression_cvc),
+             control=list(optimizer="optim"), 
+             data = tactic_no_NA)
+
+
+orchard(s4_fig, mod = "type_tactics", xlab = "Hedges' g") +
+  scale_colour_manual(values = c(rep("#808080", times = 35))) + 
+  scale_fill_manual(values = c(rep("#0a0a0a", times = 35))) +
+  theme_classic() +
+  theme(axis.text = element_text(size = 11, colour = "black"), 
+        axis.title = element_text(size = 13),
+        axis.title.x = element_blank(),
+        legend.text = element_text(size = 10),
+        legend.title = element_text(size = 10),
+        legend.position = "top") +
+  coord_flip() +
+  scale_size(range = c(0.5, 6), name = "Precision") +
+  ylab("Expression of AMT") +
+  guides(size = guide_legend(override.aes = list(colour = "#808080")))
+dev.off()
+
+## Experimental design --------------------------
+
+### Model ------------------------
+
+s5 <- rma.mv(yi,vi, mods = ~experiment,
+             random=list(~1|sp2, 
+                         ~1|id,
+                         ~1|researcher,
+                         ~1|measure_timing, 
+                         ~1|comparison, 
+                         ~1|n_obs,
+                         ~1|species2),
+             R = list(sp2 = cov.matrix_expression,
+                      id = expression_cvc),
+             control=list(optimizer="optim"), 
+             data = tactic_no_NA)
+
+summary(s5)
+
+### R2 ---------------------------------------------------
+
+r2_ml(s5)
+
+
+### Heterogeneity  ---------------------------------------
+
+i2_ml(s5) * 100
+
+
+### Plot -------------------------------------------------
+
+# Creating a model without intercept in order to build the figure
+s5_fig <- rma.mv(yi,vi, mods = ~experiment - 1,
+             random=list(~1|sp2, 
+                         ~1|id,
+                         ~1|researcher,
+                         ~1|measure_timing, 
+                         ~1|comparison, 
+                         ~1|n_obs,
+                         ~1|species2),
+             R = list(sp2 = cov.matrix_expression,
+                      id = expression_cvc),
+             control=list(optimizer="optim"), 
+             data = tactic_no_NA)
+
+orchard(s5_fig, mod = "type_tactics", xlab = "Hedges' g") +
+  scale_colour_manual(values = c("#808080", "#808080", "#808080", "#808080")) + 
+  scale_fill_manual(values = c("#0a0a0a", "#0a0a0a", "#0a0a0a", "#0a0a0a")) +
+  theme_classic() +
+  theme(axis.text = element_text(size = 11, colour = "black"), 
+        axis.title = element_text(size = 13),
+        axis.title.x = element_blank(),
+        legend.text = element_text(size = 10),
+        legend.title = element_text(size = 10),
+        legend.position = "top") +
+  coord_flip() +
+  scale_size(range = c(0.5, 6), name = "Precision") +
+  ylab("Expression of AMT") +
+  guides(size = guide_legend(override.aes = list(colour = "#808080")))
+dev.off()
+
+
+## Timing -----------------------------------
+
+### Model ----------------------------------
+
+s6 <- rma.mv(yi,vi, mods = ~measure_timing,
+             random=list(~1|sp2, 
+                         ~1|id,
+                         ~1|researcher,
+                         ~1|experiment, 
+                         ~1|comparison, 
+                         ~1|n_obs,
+                         ~1|species2),
+             R = list(sp2 = cov.matrix_expression,
+                      id = expression_cvc),
+             control=list(optimizer="optim"), 
+             data = tactic_no_NA)
+
+summary(s6)
+
+### R2 ---------------------------------------------------
+
+r2_ml(s6)
+
+
+### Heterogeneity  ---------------------------------------
+
+i2_ml(s6) * 100
+
+
+### Plot -------------------------------------------------
+
+# Creating a model without intercept in order to build the figure
+s6_fig <- rma.mv(yi,vi, mods = ~measure_timing - 1,
                  random=list(~1|sp2, 
                              ~1|id,
                              ~1|researcher,
@@ -870,7 +867,7 @@ s4_fig <- rma.mv(yi,vi, mods = ~measure_timing - 1,
                  data = tactic_no_NA)
 
 
-orchard(s4_fig, mod = "type_tactics", xlab = "Hedges' g") +
+orchard(s6_fig, mod = "type_tactics", xlab = "Hedges' g") +
   scale_colour_manual(values = c("#808080", "#808080", "#808080", "#808080")) + 
   scale_fill_manual(values = c("#0a0a0a", "#0a0a0a", "#0a0a0a", "#0a0a0a")) +
   theme_classic() +
